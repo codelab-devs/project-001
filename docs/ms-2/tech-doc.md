@@ -6,8 +6,8 @@
 
 Oldingi milestone’dagi arxitekturaga yangi komponent qo‘shiladi:
 
-**Bot Layer**
-↳ **Message Router**
+**Bot Layer**  
+↳ **Message Router**  
 ↳ **Command Handler**
 
 ---

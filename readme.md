@@ -30,6 +30,12 @@ Ushu bot orqali ayni damda mavjud muammoni emas balki telegram bot qanday ishlas
 
     Change me
 
+## Resources
+
+- https://docs.dot-net.uz/c-.net/telegram-bot
+- https://www.youtube.com/watch?v=c_AOKJE0CAY
+- PDP Academy Online
+
 ## Keywords
 
 > #Telegram #API #DotNet #String #Regex #File

@@ -5,6 +5,7 @@
 ### 1. Overview
 
 **Milestone Name:** Basic Echo Bot
+
 **Goal:** Telegram bot qanday ishlashini amaliy ko‘rsatish
 
 ---
@@ -17,8 +18,8 @@ Boshlovchi dasturchilar Telegram bot arxitekturasini real ishlash jarayonini ko�
 
 ### 3. Target Users
 
-* Telegram foydalanuvchilari
-* Bot bilan ishlashni o‘rganayotgan dasturchilar
+- Telegram foydalanuvchilari
+- Bot bilan ishlashni o‘rganayotgan dasturchilar
 
 ---
 
@@ -26,16 +27,16 @@ Boshlovchi dasturchilar Telegram bot arxitekturasini real ishlash jarayonini ko�
 
 ### ✅ In Scope
 
-* Bot text message qabul qiladi
-* Xabarni o‘ziga qaytaradi
-* Polling orqali ishlaydi
+- Bot text message qabul qiladi
+- Xabarni o‘ziga qaytaradi
+- Polling orqali ishlaydi
 
 ### ❌ Out of Scope
 
-* Database
-* Command system
-* Inline keyboard
-* Media handling
+- Database
+- Command system
+- Inline keyboard
+- Media handling
 
 ---
 
@@ -62,6 +63,6 @@ Boshlovchi dasturchilar Telegram bot arxitekturasini real ishlash jarayonini ko�
 
 ### 7. Success Criteria
 
-* User yozgan har qanday text aynan qaytadi
-* Bot ishlashi barqaror
-* Code o‘qilishi oson
+- User yozgan har qanday text aynan qaytadi
+- Bot ishlashi barqaror
+- Code o‘qilishi oson

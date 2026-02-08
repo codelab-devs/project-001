@@ -5,6 +5,7 @@
 ### 1. Overview
 
 **Milestone Name:** Filtered Echo Bot
+
 **Goal:** Bot zararli yoki nomaqbul xabarlarni aniqlay olishi
 
 ---

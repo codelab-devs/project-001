@@ -22,7 +22,7 @@ Ushu bot orqali ayni damda mavjud muammoni emas balki telegram bot qanday ishlas
 3. [Milestone 3](./docs/ms-3/requirements.md)
 4. [Milestone 4](./docs/ms-4/requirements.md)
 
-## Setup
+## Setup 
 
     Change me
 

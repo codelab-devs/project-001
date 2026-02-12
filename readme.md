@@ -24,12 +24,12 @@ Ushu bot orqali ayni damda mavjud muammoni emas balki telegram bot qanday ishlas
 
 ## Setup 
 
-    -Clone qilib yuklab olinadi
-    -BotFatherdan token olinib dasturda BotTokenga beriladi
+    - Clone qilib yuklab olinadi
+    - BotFatherdan token olinib dasturda BotTokenga beriladi
 
 ## Usage
 
-    -dotnet run buyrug'i orqali ishga tushiriladi
+    - dotnet run buyrug'i orqali ishga tushiriladi
 
 ## Resources
 

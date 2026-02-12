@@ -24,11 +24,12 @@ Ushu bot orqali ayni damda mavjud muammoni emas balki telegram bot qanday ishlas
 
 ## Setup 
 
-    Change me
+    -Clone qilib yuklab olinadi
+    -BotFatherdan token olinib dasturda BotTokenga beriladi
 
 ## Usage
 
-    Change me
+    -dotnet run buyrug'i orqali ishga tushiriladi
 
 ## Resources
 

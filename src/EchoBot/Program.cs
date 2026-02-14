@@ -19,7 +19,7 @@ class Program
        
         var receiverOptions = new ReceiverOptions
         {
-            AllowedUpdates = Array.Empty<UpdateType>() 
+               AllowedUpdates = new[] { UpdateType.Message }
         };
 
         Console.WriteLine("Bot ishga tushdi... Xabarlarni kutmoqdaman.");
@@ -32,7 +32,7 @@ class Program
         );
 
       
-        await Task.Delay(-1); 
+         await Task.Delay(-1, cts.Token);
     }
 
     

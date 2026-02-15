@@ -24,12 +24,13 @@ Ushu bot orqali ayni damda mavjud muammoni emas balki telegram bot qanday ishlas
 
 ## Setup 
 
-    - Clone qilib yuklab olinadi
-    - BotFatherdan token olinib dasturda BotTokenga beriladi
+   - git clone https://github.com/codelab-devs/project-001.git
+   - git checkout feature/Fayzullo
+   - change bot token from EchoTelegramBot/EchoTelegramBot/Program.cs
 
 ## Usage
 
-    - dotnet run buyrug'i orqali ishga tushiriladi
+    - dotnet run 
 
 ## Resources
 

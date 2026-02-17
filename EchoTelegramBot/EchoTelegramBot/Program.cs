@@ -33,14 +33,14 @@ namespace EchoTelegramBot
         static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
             CancellationToken cancellationToken)
         {
-            if (update.Message is null && update.Type == UpdateType.Message)
+            if (update.Message is null || update.Type == UpdateType.Message)
                 return;
             var chatId = update.Message.Chat.Id;
             var messageText = update.Message.Text;
             if (string.IsNullOrEmpty(messageText))
                 return;
             await botClient.SendMessage(
-                chatId: chatId,
+                chatId:chatId,
                 text: messageText,
                 cancellationToken: cancellationToken);
         }

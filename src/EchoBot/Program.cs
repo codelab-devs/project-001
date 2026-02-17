@@ -19,8 +19,7 @@ class Program
 
         var receiverOptions = new ReceiverOptions
         {
-            
-            AllowedUpdates = new[] { UpdateType.Message } 
+            AllowedUpdates = new[] { UpdateType.Message }
         };
 
         Console.WriteLine("Bot ishga tushdi... Xabarlarni kutmoqdaman.");
@@ -32,18 +31,25 @@ class Program
             cancellationToken: cts.Token
         );
 
-       
-        await Task.Delay(-1, cts.Token); 
+        await Task.Delay(-1, cts.Token);
     }
 
-    static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
+        CancellationToken cancellationToken)
     {
-
-        if (update.Message is not { Text: { } messageText } || update.Message.Type != MessageType.Text)
+        if (update.Message is null || update.Message.Type != MessageType.Text)
             return;
 
+        var messageText = update.Message.Text;
         var chatId = update.Message.Chat.Id;
         var firstName = update.Message.Chat.FirstName;
+
+
+        if (string.IsNullOrEmpty(messageText))
+        {
+            return;
+        }
+
 
         Console.WriteLine($"{firstName} yozdi: {messageText}");
 
@@ -53,7 +59,8 @@ class Program
             cancellationToken: cancellationToken);
     }
 
-    static Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+    static Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception,
+        CancellationToken cancellationToken)
     {
         Console.WriteLine($"Xatolik yuz berdi: {exception.Message}");
         return Task.CompletedTask;

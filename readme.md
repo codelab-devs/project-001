@@ -6,7 +6,7 @@ Bu loyiha Milestone 1 talablari asosida yaratilgan oddiy Echo bot hisoblanadi.
 Ushbu bot orqali ayni damda mavjud muammoni emas, balki Telegram bot qanday ishlashini o'rganish va botlar olamiga kirishdagi boshlang'ich qiyinchiliklarni yengillashtirish maqsad qilingan.
 
 ## Maqsad
-- Telegram bot va Telegram API qanday ishlashini tushunish
+-Telegram bot va Telegram API qanday ishlashini tushunish
 - Foydalanuvchining telegramdagi bazaviy ma'lumotlari bilan ishlash
 - Dotnet'da String'lar ustida amaliyot o'tkazish
 - Dotnet'da Regex'ni o'rganish

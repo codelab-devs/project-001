@@ -24,7 +24,7 @@ Ushu bot orqali ayni damda mavjud muammoni emas balki telegram bot qanday ishlas
 
 ## Setup 
 
-   - git clone https://github.com/codelab-devs/project-001/tree/2b13f59a02a74bc213dab62b8207dce156c4d6f6/EchoTelegramBot
+   - git clone https://github.com/codelab-devs/project-001.git
    - git checkout feature/Fayzullo
    - change bot token from EchoTelegramBot/EchoTelegramBot/Program.cs
 

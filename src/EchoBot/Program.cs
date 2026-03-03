@@ -19,10 +19,11 @@ class Program
 
         var receiverOptions = new ReceiverOptions
         {
-            AllowedUpdates = new[] { UpdateType.Message }
+            AllowedUpdates = Array.Empty<UpdateType>(),
+            ThrowPendingUpdates = true
         };
 
-        Console.WriteLine("Bot ishga tushdi... Xabarlarni kutmoqdaman.");
+        Console.WriteLine("Smart Echo Bot ishga tushdi (Rasm qaytarish rejimi).");
 
         botClient.StartReceiving(
             updateHandler: HandleUpdateAsync,
@@ -34,36 +35,64 @@ class Program
         await Task.Delay(-1, cts.Token);
     }
 
-    static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
-        CancellationToken cancellationToken)
+    static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken ct)
     {
-        if (update.Message is null || update.Message.Type != MessageType.Text)
+        if (update.Message is not { } message)
             return;
 
-        var messageText = update.Message.Text;
-        var chatId = update.Message.Chat.Id;
-        var firstName = update.Message.Chat.FirstName;
-
-
-        if (string.IsNullOrEmpty(messageText))
+        try
         {
+            switch (message.Type)
+            {
+                case MessageType.Text:
+                    await ProcessTextMessage(botClient, message, ct);
+                    break;
+
+                case MessageType.Photo:
+                    var photoId = message.Photo[^1].FileId;
+                    await botClient.SendPhotoAsync(
+                        chatId: message.Chat.Id,
+                        photo: InputFile.FromFileId(photoId),
+                        caption: " ",
+                        cancellationToken: ct);
+                    break;
+
+                case MessageType.Sticker:
+                
+                    string stickerId = message.Sticker?.FileId ?? "ID topilmadi";
+                    await botClient.SendTextMessageAsync(message.Chat.Id, $"Sticker ID: {stickerId}",
+                        cancellationToken: ct);
+                    break;
+
+                default:
+                    Console.WriteLine($"[INFO] Boshqa turdagi xabar: {message.Type}");
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ERROR] Xatolik: {ex.Message}");
+        }
+    }
+
+    static async Task ProcessTextMessage(ITelegramBotClient botClient, Message message, CancellationToken ct)
+    {
+        string text = message.Text ?? "";
+
+        if (text.Equals("/sart", StringComparison.OrdinalIgnoreCase))
+        {
+            await botClient.SendTextMessageAsync(message.Chat.Id, "Xush kelibsiz! Rasm matn stiker yuboring, men uni qaytaraman.",
+                cancellationToken: ct);
             return;
         }
 
-
-        Console.WriteLine($"{firstName} yozdi: {messageText}");
-
-        await botClient.SendTextMessageAsync(
-            chatId: chatId,
-            
-            text: messageText,
-            cancellationToken: cancellationToken);
+        await botClient.SendTextMessageAsync(message.Chat.Id, $" {text}", cancellationToken: ct);
     }
 
-    static Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception,
-        CancellationToken cancellationToken)
+    static Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken ct)
     {
-        Console.WriteLine($"Xatolik yuz berdi: {exception.Message}");
+        Console.WriteLine($"[API ERROR] {exception.Message}");
+        
         return Task.CompletedTask;
     }
 }

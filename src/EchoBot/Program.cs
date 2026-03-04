@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -6,7 +7,7 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace MurodEchoBot;
+namespace SmartEchoBot;
 
 class Program
 {
@@ -19,7 +20,7 @@ class Program
 
         var receiverOptions = new ReceiverOptions
         {
-            AllowedUpdates = new[] { UpdateType.Message }
+            AllowedUpdates = Array.Empty<UpdateType>() 
         };
 
         Console.WriteLine("Bot ishga tushdi... Xabarlarni kutmoqdaman.");
@@ -34,36 +35,79 @@ class Program
         await Task.Delay(-1, cts.Token);
     }
 
-    static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
-        CancellationToken cancellationToken)
+    static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken ct)
     {
-        if (update.Message is null || update.Message.Type != MessageType.Text)
+        if (update.Message is not { } message)
             return;
 
-        var messageText = update.Message.Text;
-        var chatId = update.Message.Chat.Id;
-        var firstName = update.Message.Chat.FirstName;
-
-
-        if (string.IsNullOrEmpty(messageText))
+    
+        switch (message.Type)
         {
-            return;
+            case MessageType.Text:
+                if (message.Text != null && message.Text.StartsWith("/"))
+                    await ProcessCommandMessage(botClient, message, ct);
+                else
+                    await ProcessTextMessage(botClient, message, ct);
+                break;
+
+            case MessageType.Photo:
+                await ProcessPhotoMessage(botClient, message, ct);
+                break;
+
+            case MessageType.Sticker:
+                await ProcessStickerMessage(botClient, message, ct);
+                break;
+
+            default:
+                Console.WriteLine($"Boshqa turdagi xabar: {message.Type}");
+                break;
         }
-
-
-        Console.WriteLine($"{firstName} yozdi: {messageText}");
-
-        await botClient.SendTextMessageAsync(
-            chatId: chatId,
-            
-            text: messageText,
-            cancellationToken: cancellationToken);
     }
 
-    static Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception,
-        CancellationToken cancellationToken)
+    
+    static async Task ProcessCommandMessage(ITelegramBotClient botClient, Message message, CancellationToken ct)
     {
-        Console.WriteLine($"Xatolik yuz berdi: {exception.Message}");
+        var command = message.Text?.ToLower();
+        if (command == "/start")
+        {
+            await botClient.SendTextMessageAsync(message.Chat.Id, "Xush kelibsiz! Men Smart botman .", cancellationToken: ct);
+        }
+    }
+
+
+    static async Task ProcessTextMessage(ITelegramBotClient botClient, Message message, CancellationToken ct)
+    {
+        Console.WriteLine($"{message.Chat.FirstName} yozdi: {message.Text}");
+        await botClient.SendTextMessageAsync(message.Chat.Id, $" {message.Text}", cancellationToken: ct);
+    }
+
+ 
+    static async Task ProcessPhotoMessage(ITelegramBotClient botClient, Message message, CancellationToken ct)
+    {
+        if (message.Photo is not { } photo) return;
+
+        Console.WriteLine($"{message.Chat.FirstName} rasmni qaytarish.");
+
+      
+        var fileId = photo.Last().FileId;
+
+        await botClient.SendPhotoAsync(
+            chatId: message.Chat.Id,
+            photo: InputFile.FromFileId(fileId),
+            caption: " ",
+            cancellationToken: ct);
+    }
+
+    
+    static async Task ProcessStickerMessage(ITelegramBotClient botClient, Message message, CancellationToken ct)
+    {
+        Console.WriteLine($"{message.Chat.FirstName} styaker yubordi.");
+        await botClient.SendTextMessageAsync(message.Chat.Id, "Zur stiker", cancellationToken: ct);
+    }
+
+    static Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken ct)
+    {
+        Console.WriteLine($"Xatoli: {exception.Message}");
         return Task.CompletedTask;
     }
 }

@@ -11,6 +11,7 @@ namespace SmartEchoBot;
 
 class Program
 {
+    
     private static readonly string Token = "8595258461:AAF87pKGDabPkBxiaNaw_bHCCLHa1e4rb70";
 
     static async Task Main()

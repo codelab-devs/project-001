@@ -7,11 +7,10 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace SmartEchoBot;
+namespace EchoBot;
 
 class Program
 {
-    
     private static readonly string Token = "8595258461:AAF87pKGDabPkBxiaNaw_bHCCLHa1e4rb70";
 
     static async Task Main()
@@ -19,9 +18,10 @@ class Program
         var botClient = new TelegramBotClient(Token);
         using var cts = new CancellationTokenSource();
 
+       
         var receiverOptions = new ReceiverOptions
         {
-            AllowedUpdates = Array.Empty<UpdateType>() 
+            AllowedUpdates = new[] { UpdateType.Message } 
         };
 
         Console.WriteLine("Bot ishga tushdi... Xabarlarni kutmoqdaman.");
@@ -41,11 +41,11 @@ class Program
         if (update.Message is not { } message)
             return;
 
-    
         switch (message.Type)
         {
             case MessageType.Text:
-                if (message.Text != null && message.Text.StartsWith("/"))
+             
+                if (message.Text != null && message.Text.StartsWith('/'))
                     await ProcessCommandMessage(botClient, message, ct);
                 else
                     await ProcessTextMessage(botClient, message, ct);
@@ -58,14 +58,9 @@ class Program
             case MessageType.Sticker:
                 await ProcessStickerMessage(botClient, message, ct);
                 break;
-
-            default:
-                Console.WriteLine($"Boshqa turdagi xabar: {message.Type}");
-                break;
         }
     }
 
-    
     static async Task ProcessCommandMessage(ITelegramBotClient botClient, Message message, CancellationToken ct)
     {
         var command = message.Text?.ToLower();
@@ -75,35 +70,37 @@ class Program
         }
     }
 
-
     static async Task ProcessTextMessage(ITelegramBotClient botClient, Message message, CancellationToken ct)
     {
         Console.WriteLine($"{message.Chat.FirstName} yozdi: {message.Text}");
-        await botClient.SendTextMessageAsync(message.Chat.Id, $" {message.Text}", cancellationToken: ct);
+     
+        await botClient.SendTextMessageAsync(message.Chat.Id, message.Text ?? "", cancellationToken: ct);
     }
 
- 
     static async Task ProcessPhotoMessage(ITelegramBotClient botClient, Message message, CancellationToken ct)
     {
-        if (message.Photo is not { } photo) return;
+     
+        var photo = message.Photo;
+        if (photo == null || photo.Length == 0) return;
 
         Console.WriteLine($"{message.Chat.FirstName} rasmni qaytarish.");
 
-      
         var fileId = photo.Last().FileId;
 
         await botClient.SendPhotoAsync(
             chatId: message.Chat.Id,
             photo: InputFile.FromFileId(fileId),
-            caption: " ",
+            caption: null, 
             cancellationToken: ct);
     }
 
-    
     static async Task ProcessStickerMessage(ITelegramBotClient botClient, Message message, CancellationToken ct)
     {
-        Console.WriteLine($"{message.Chat.FirstName} styaker yubordi.");
-        await botClient.SendTextMessageAsync(message.Chat.Id, "Zur stiker", cancellationToken: ct);
+       
+        if (message.Sticker is not { } sticker) return;
+        
+        Console.WriteLine($"{message.Chat.FirstName} stiker yubordi.");
+        await botClient.SendTextMessageAsync(message.Chat.Id, $"Sticker ID: {sticker.FileId}", cancellationToken: ct);
     }
 
     static Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken ct)

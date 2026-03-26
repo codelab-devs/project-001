@@ -105,7 +105,7 @@ class Program
 
     static Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken ct)
     {
-        Console.WriteLine($"Xatoli: {exception.Message}");
+        Console.WriteLine($"Xatolik yuz berdi: {exception.Message}");
         return Task.CompletedTask;
     }
 }
